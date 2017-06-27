@@ -1,0 +1,7 @@
+pympi-ling==1.69
+rsb-python==0.16.0
+rststable==0.16.1
+rstsandbox==0.16.1
+rstdeprecated==0.16.1
+rsbag-python==0.16.1
+pluginbase==0.5
