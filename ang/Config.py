@@ -46,6 +46,7 @@ class Config(object):
             ('output-file', None, 'output file to generate.'),
             ('channel', [], 'only matching channels will be processed. channels from handlers will be appended.'),
             ('number-events', None, 'stop after a specific amount of processed events.'),
+            ('start-time-ms', 0, 'the start time of the recording in milliseconds. will be subtracted from annotations'),
             ('input', 'rsb', 'input metadata provider plugin to load.'),
             ('plugin-path-input', ['./plugins/input'], 'search path for input plugins.'),
             ('plugin-path-handler', ['./plugins/handler'], 'search path for handler plugins.'),

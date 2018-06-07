@@ -19,6 +19,7 @@
 
 
 import logging
+from datetime import timedelta
 from rsb import Event
 from rst.bayesnetwork.BayesNetworkEvidence_pb2 import BayesNetworkEvidence
 
@@ -43,9 +44,9 @@ class Handler(object):
         data = BayesNetworkEvidence()
         data.ParseFromString(data_bytearray)
         if data.HasField('time'):
-            time = data.time.time
+            time = timedelta(milliseconds=data.time.time)
         else:
-            time = event.getMetaData().createTime
+            time = timedelta(seconds=event.getMetaData().userTimes['rsbag:original_receive'])
         for variable_state in data.observations:
             variable = variable_state.variable
             state = variable_state.state

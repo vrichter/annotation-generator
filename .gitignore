@@ -1,3 +1,8 @@
 .idea
 env/*
 *.pyc
+bin/
+include/
+lib/
+local/
+share/

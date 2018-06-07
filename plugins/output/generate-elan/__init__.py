@@ -22,14 +22,15 @@
 import logging
 import pympi
 import os
+import datetime
 
 __author__ = 'Viktor Richter'
 
 logger = logging.getLogger(__name__)
 
 
-def as_elan_time(timestamp):
-    return int(round(timestamp * 1000))
+def as_elan_time(td):
+    return int(round((td.microseconds / 10**3) + ((td.seconds + (td.days * 24 * 3600)) * 1000)))
 
 
 def validate(data):

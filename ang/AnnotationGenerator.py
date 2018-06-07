@@ -22,6 +22,7 @@
 import copy
 import sys
 import re
+import datetime
 from pluginbase import PluginBase
 from ang import HandlerRepository
 import logging
@@ -146,7 +147,7 @@ def update_callback_print(message):
 
 
 def get_event_time(event):
-    return event.getMetaData().createTime
+    return datetime.timedelta(seconds=event.getMetaData().userTimes['rsbag:original_receive'])
 
 
 def add_handler_channels(config, handles):
@@ -161,9 +162,18 @@ def add_handler_channels(config, handles):
     config.set('base', 'channel', str(channels))
 
 
+def adapt_times(tiers, config):
+    delta = datetime.timedelta(milliseconds=float(config.get('base', 'start-time-ms')))
+    for tier, value in tiers.iteritems():
+        for elem in value:
+            elem['start'] = elem['start']-delta
+            elem['end'] = elem['end']-delta
+
+
 class AnnotationGenerator(object):
     # setup data provider and handlers
     def __init__(self, config):
+        self.__config = config
         self.__plugin_base_input = PluginBase(package='ang.input')
         self.__plugin_source_input = self.__plugin_base_input.make_plugin_source(searchpath=config.plugin_path_input())
         self.__plugin_base_handler = PluginBase(package='ang.handler')
@@ -204,16 +214,13 @@ class AnnotationGenerator(object):
 
     # read annotations from file
     def read_all_data(self, update_callback=update_callback_pass):
-        time_first_event = None
-        time_last_event = None
         with self.__provider.plugin() as prov:
             events = prov.events()
             sum_events = len(events)
             current_event_number = 0
+            last_event_time =None
             for event in events:
-                if current_event_number == 0:
-                    time_first_event = get_event_time(event)
-                time_last_event = get_event_time(event)
+                last_event_time = get_event_time(event)
                 current_event_number += 1
                 ch = prov.channel(event)
                 channel = ':'.join(prov.channel(event))
@@ -236,11 +243,12 @@ class AnnotationGenerator(object):
                     continue
                 # set start/end times for edge events
                 if 'end' not in values[-1]:
-                    values[-1]['end'] = time_last_event
+                    values[-1]['end'] = last_event_time
                 if tier in tiers:
                     tiers[tier].extend(values)
                 else:
                     tiers[tier] = values
+        adapt_times(tiers, self.__config)
         return tiers
 
     # do post processing

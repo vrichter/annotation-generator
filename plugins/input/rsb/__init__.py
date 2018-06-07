@@ -43,7 +43,7 @@ def which(program):
 
 class RsbagInput(object):
     def __init__(self, filename, channel, executable):
-        print "will filter for following channels",channel
+        print "will filter for following channels",
         rsbag_ex = which(executable)
         if not os.path.isfile(filename):
             error = 'Input file "{}" does not exist or is not a regular file.'.format(filename)

@@ -1,7 +1,7 @@
 annotation-generator
 ====================
 
-Uses metadata recordings (currently .tide files) to generate annotations (currently .ean) files.
+Uses metadata recordings (currently .tide files) to generate annotations (currently .elan) files.
 
 dependencies
 ============
