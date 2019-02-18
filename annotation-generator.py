@@ -22,7 +22,7 @@
 import argparse
 import logging
 import sys
-from ang.Config import Config
+from ang.Config import Config, default_config
 from ang.AnnotationGenerator import AnnotationGenerator
 from ang.AnnotationGenerator import update_callback_print
 
@@ -42,7 +42,10 @@ def main(arguments):
                         default=[], action='append', help='Override options from config.')
     args = parser.parse_args(arguments)
 
-    config = Config(args.config)
+    if args.config is not None:
+        config = Config(args.config)
+    else:
+        config = default_config()
     config.set_all(args.override_config)
     config.set_if('base', 'input-file', args.input)
     config.set_if('base', 'output-file', args.output)

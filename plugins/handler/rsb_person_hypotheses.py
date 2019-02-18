@@ -45,7 +45,7 @@ class Handler(RstBaseHandler):
                                     z=person.body.location.z,
                                     frame_id = person.body.location.frame_id
                                 )))
-        self.add_entry(self.__tier, dict(start=time, label=json.dumps(persons)))
+        self.add_entry(self.__tier, dict(start=time, label=persons))
 
     def validate_setup(self):
         if self.__config is None:
